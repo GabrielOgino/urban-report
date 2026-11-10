@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/reports")
 public class ReportController {
 
     private final ReportRepository repository;
@@ -21,19 +22,19 @@ public class ReportController {
         this.repository = repository;
     }
 
-    @GetMapping("/reports")
+    @GetMapping
     public List<Report> findAll() {
         return repository.findAll();
     }
 
-    @GetMapping("/reports/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Report> findById(@PathVariable Long id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/reports")
+    @PostMapping
     public ResponseEntity<Report> create(@RequestBody CreateReportRequest request) {
         Report report = new Report(repository.nextId(),
                 request.title(),
@@ -47,7 +48,7 @@ public class ReportController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    @PatchMapping("/reports/{id}/status")
+    @PatchMapping("/{id}/status")
     public ResponseEntity<Report> updateStatus(@PathVariable Long id, @RequestBody UpdateStatusRequest request) {
 
         Optional<Report> result = repository.findById(id);

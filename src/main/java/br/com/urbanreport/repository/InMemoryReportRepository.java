@@ -3,14 +3,24 @@ package br.com.urbanreport.repository;
 import br.com.urbanreport.model.Report;
 import br.com.urbanreport.model.ReportCategory;
 import br.com.urbanreport.model.ReportStatus;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class InMemoryReportRepository implements ReportRepository {
 
     private final List<Report> reports = new ArrayList<>();
+
+
+    public InMemoryReportRepository() {
+        save(new Report(1L, "Buraco na via", "Buraco grande na esquina",
+                ReportCategory.POTHOLE, -23.5505, -46.6333));
+        save(new Report(2L, "Poste apagado", "Rua escura há uma semana",
+                ReportCategory.STREET_LIGHTING, -23.5510, -46.6340));
+    }
 
     @Override
     public Report save(Report report) {

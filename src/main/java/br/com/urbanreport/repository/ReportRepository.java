@@ -19,4 +19,6 @@ public interface ReportRepository {
 
     List<Report> findByCategory(ReportCategory category);
 
+    Long nextId();
+
 }

@@ -1,12 +1,11 @@
 package br.com.urbanreport.controller;
 
+import br.com.urbanreport.dto.CreateReportRequest;
 import br.com.urbanreport.model.Report;
 import br.com.urbanreport.repository.ReportRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +31,18 @@ public class ReportController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/reports")
+    public ResponseEntity<Report> create(@RequestBody CreateReportRequest request) {
+        Report report = new Report(repository.nextId(),
+                request.title(),
+                request.description(),
+                request.category(),
+                request.latitude(),
+                request.longitude()
+        );
+
+        Report saved = repository.save(report);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
 
 }

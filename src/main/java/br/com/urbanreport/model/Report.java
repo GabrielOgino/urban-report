@@ -1,4 +1,5 @@
 package br.com.urbanreport.model;
+
 import java.time.LocalDateTime;
 
 public class Report {
@@ -55,10 +56,10 @@ public class Report {
     }
 
     public void changeStatus(ReportStatus newStatus) {
-        if (this.status == ReportStatus.RESOLVED || this.status == ReportStatus.REJECTED){
+        if (this.status == ReportStatus.RESOLVED || this.status == ReportStatus.REJECTED) {
             throw new IllegalStateException("Ocorrência já finalizada");
         }
-            this.status = newStatus;
+        this.status = newStatus;
     }
 
     @Override

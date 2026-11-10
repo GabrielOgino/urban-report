@@ -14,11 +14,13 @@ public class InMemoryReportRepository implements ReportRepository {
 
     private final List<Report> reports = new ArrayList<>();
 
+    private long currentId = 0;
+
 
     public InMemoryReportRepository() {
-        save(new Report(1L, "Buraco na via", "Buraco grande na esquina",
+        save(new Report(nextId(), "Buraco na via", "Buraco grande na esquina",
                 ReportCategory.POTHOLE, -23.5505, -46.6333));
-        save(new Report(2L, "Poste apagado", "Rua escura há uma semana",
+        save(new Report(nextId(), "Poste apagado", "Rua escura há uma semana",
                 ReportCategory.STREET_LIGHTING, -23.5510, -46.6340));
     }
 
@@ -52,6 +54,12 @@ public class InMemoryReportRepository implements ReportRepository {
         return reports.stream()
                 .filter(report -> report.getCategory() == category)
                 .toList();
+    }
+
+    @Override
+    public Long nextId() {
+        currentId++;
+        return currentId;
     }
 
 }

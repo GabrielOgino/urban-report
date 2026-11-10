@@ -1,6 +1,7 @@
 package br.com.urbanreport.repository;
 
 import br.com.urbanreport.model.Report;
+import br.com.urbanreport.model.ReportCategory;
 import br.com.urbanreport.model.ReportStatus;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ReportRepository {
     List<Report> findAll();
 
     List<Report> findByStatus(ReportStatus status);
+
+    List<Report> findByCategory(ReportCategory category);
 
 }

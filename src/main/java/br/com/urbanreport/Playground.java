@@ -28,5 +28,8 @@ public class Playground {
 
         r2.changeStatus(ReportStatus.IN_PROGRESS);
         System.out.println("Abertos: " + repository.findByStatus(ReportStatus.OPEN).size());
+
+        System.out.println("Buracos: " + repository.findByCategory(ReportCategory.POTHOLE).size());
+        System.out.println("Report 3: " + repository.findById(3L).orElse(null));
     }
 }

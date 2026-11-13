@@ -1,26 +1,35 @@
 package br.com.urbanreport.model;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "reports")
 public class Report {
 
-    private final Long id;
-    private final String title;
-    private final String description;
-    private final ReportCategory category;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    private String description;
+    @Enumerated(EnumType.STRING)
+    private ReportCategory category;
+    @Enumerated(EnumType.STRING)
     private ReportStatus status = ReportStatus.OPEN;
-    private final double latitude;
-    private final double longitude;
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private double latitude;
+    private double longitude;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 
-    public Report(Long id, String title, String description, ReportCategory category, double latitude, double longitude) {
-        this.id = id;
+    public Report(String title, String description, ReportCategory category, double latitude, double longitude) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    protected Report() {
+
     }
 
     public Long getId() {

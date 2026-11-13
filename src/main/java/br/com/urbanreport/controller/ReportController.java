@@ -3,7 +3,6 @@ package br.com.urbanreport.controller;
 import br.com.urbanreport.dto.CreateReportRequest;
 import br.com.urbanreport.dto.UpdateStatusRequest;
 import br.com.urbanreport.model.Report;
-import br.com.urbanreport.model.ReportStatus;
 import br.com.urbanreport.repository.ReportRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +35,7 @@ public class ReportController {
 
     @PostMapping
     public ResponseEntity<Report> create(@RequestBody CreateReportRequest request) {
-        Report report = new Report(repository.nextId(),
-                request.title(),
+        Report report = new Report(request.title(),
                 request.description(),
                 request.category(),
                 request.latitude(),
@@ -58,7 +56,8 @@ public class ReportController {
             try{
                 report.changeStatus(request.status());
 
-                return ResponseEntity.ok(report);
+                Report saved = repository.save(report);
+                return ResponseEntity.ok(saved);
             }
             catch(IllegalStateException e){
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();

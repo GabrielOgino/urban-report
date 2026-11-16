@@ -4,6 +4,7 @@ import br.com.urbanreport.dto.CreateReportRequest;
 import br.com.urbanreport.dto.UpdateStatusRequest;
 import br.com.urbanreport.model.Report;
 import br.com.urbanreport.service.ReportService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class ReportController {
     }
 
     @PostMapping
-    public ResponseEntity<Report> create(@RequestBody CreateReportRequest request) {
+    public ResponseEntity<Report> create(@Valid @RequestBody CreateReportRequest request) {
 
         Report saved = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Report> updateStatus(@PathVariable Long id, @RequestBody UpdateStatusRequest request) {
+    public ResponseEntity<Report> updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateStatusRequest request) {
         try {
             return service.updateStatus(id, request.status())
                     .map(ResponseEntity::ok)

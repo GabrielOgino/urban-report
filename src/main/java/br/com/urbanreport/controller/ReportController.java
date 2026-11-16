@@ -3,66 +3,50 @@ package br.com.urbanreport.controller;
 import br.com.urbanreport.dto.CreateReportRequest;
 import br.com.urbanreport.dto.UpdateStatusRequest;
 import br.com.urbanreport.model.Report;
-import br.com.urbanreport.repository.ReportRepository;
+import br.com.urbanreport.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/reports")
 public class ReportController {
 
-    private final ReportRepository repository;
+    private final ReportService service;
 
-    public ReportController(ReportRepository repository) {
-        this.repository = repository;
+    public ReportController(ReportService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Report> findAll() {
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Report> findById(@PathVariable Long id) {
-        return repository.findById(id)
+        return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Report> create(@RequestBody CreateReportRequest request) {
-        Report report = new Report(request.title(),
-                request.description(),
-                request.category(),
-                request.latitude(),
-                request.longitude()
-        );
 
-        Report saved = repository.save(report);
+        Report saved = service.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<Report> updateStatus(@PathVariable Long id, @RequestBody UpdateStatusRequest request) {
-
-        Optional<Report> result = repository.findById(id);
-
-        if (result.isPresent()) {
-            Report report = result.get();
-            try{
-                report.changeStatus(request.status());
-
-                Report saved = repository.save(report);
-                return ResponseEntity.ok(saved);
-            }
-            catch(IllegalStateException e){
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
+        try {
+            return service.updateStatus(id, request.status())
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        return ResponseEntity.notFound().build();
     }
 }

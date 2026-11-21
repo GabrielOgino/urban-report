@@ -1,6 +1,7 @@
 package br.com.urbanreport.service;
 
 import br.com.urbanreport.dto.CreateReportRequest;
+import br.com.urbanreport.exception.ReportNotFoundException;
 import br.com.urbanreport.model.Report;
 import br.com.urbanreport.model.ReportStatus;
 import br.com.urbanreport.repository.ReportRepository;
@@ -33,20 +34,15 @@ public class ReportService {
         return repository.save(report);
     }
 
-    public Optional<Report> findById(Long id){
-        return repository.findById(id);
+    public Report findById(Long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new ReportNotFoundException(id));
     }
 
-    public Optional<Report> updateStatus(Long id, ReportStatus newStatus){
-        Optional<Report> result = repository.findById(id);
-
-        if(result.isPresent()){
-            Report report = result.get();
-            report.changeStatus(newStatus);
-            Report saved = repository.save(report);
-            return Optional.of(saved);
-        }
-        return Optional.empty();
+    public Report updateStatus(Long id, ReportStatus newStatus){
+        Report report = findById(id);
+        report.changeStatus(newStatus);
+        return repository.save(report);
     }
 
 

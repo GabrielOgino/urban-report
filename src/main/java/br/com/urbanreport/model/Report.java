@@ -1,4 +1,5 @@
 package br.com.urbanreport.model;
+import br.com.urbanreport.exception.InvalidStatusTransitionException;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -66,7 +67,7 @@ public class Report {
 
     public void changeStatus(ReportStatus newStatus) {
         if (this.status == ReportStatus.RESOLVED || this.status == ReportStatus.REJECTED) {
-            throw new IllegalStateException("Ocorrência já finalizada");
+            throw new InvalidStatusTransitionException("Ocorrência já finalizada");
         }
         this.status = newStatus;
     }

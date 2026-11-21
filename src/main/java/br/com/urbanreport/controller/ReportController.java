@@ -27,10 +27,8 @@ public class ReportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Report> findById(@PathVariable Long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Report findById(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @PostMapping
@@ -41,13 +39,7 @@ public class ReportController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Report> updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateStatusRequest request) {
-        try {
-            return service.updateStatus(id, request.status())
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    public Report updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateStatusRequest request) {
+        return service.updateStatus(id, request.status());
     }
 }

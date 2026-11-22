@@ -1,10 +1,12 @@
 package br.com.urbanreport.service;
 
 import br.com.urbanreport.dto.CreateReportRequest;
+import br.com.urbanreport.dto.PageResponse;
 import br.com.urbanreport.exception.ReportNotFoundException;
 import br.com.urbanreport.model.Report;
 import br.com.urbanreport.model.ReportStatus;
 import br.com.urbanreport.repository.ReportRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +21,8 @@ public class ReportService {
         this.repository = repository;
     }
 
-    public List<Report> findAll() {
-        return repository.findAll();
+    public PageResponse<Report> findAll(Pageable pageable) {
+        return PageResponse.from(repository.findAll(pageable));
     }
 
     public Report create(CreateReportRequest request) {

@@ -5,9 +5,23 @@ import jakarta.validation.constraints.*;
 
 
 public record CreateReportRequest(
-        @NotBlank @Size(max = 255) String title,
-        @Size(max = 255) String description,
-        @NotNull ReportCategory category,
-        @NotNull @DecimalMin("-90.0") @DecimalMax("90.0") Double latitude,
-        @NotNull @DecimalMin("-180.0") @DecimalMax("180.0") Double longitude
+        @NotBlank(message = "O título é obrigatório")
+        @Size(max = 255, message = "O título deve ter no máximo 255 caracteres")
+        String title,
+
+        @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres")
+        String description,
+
+        @NotNull(message = "A categoria é obrigatória")
+        ReportCategory category,
+
+        @NotNull(message = "A latitude é obrigatória")
+        @DecimalMin(value = "-90.0", message = "A latitude deve estar entre -90 e 90")
+        @DecimalMax(value = "90.0", message = "A latitude deve estar entre -90 e 90")
+        Double latitude,
+
+        @NotNull(message = "A longitude é obrigatória")
+        @DecimalMin(value = "-180.0", message = "A longitude deve estar entre -180 e 180")
+        @DecimalMax(value = "180.0", message = "A longitude deve estar entre -180 e 180")
+        Double longitude
 ) {}

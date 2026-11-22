@@ -4,6 +4,8 @@ import br.com.urbanreport.dto.CreateReportRequest;
 import br.com.urbanreport.dto.PageResponse;
 import br.com.urbanreport.dto.UpdateStatusRequest;
 import br.com.urbanreport.model.Report;
+import br.com.urbanreport.model.ReportCategory;
+import br.com.urbanreport.model.ReportStatus;
 import br.com.urbanreport.service.ReportService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +26,10 @@ public class ReportController {
     }
 
     @GetMapping
-    public PageResponse<Report> findAll(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return service.findAll(pageable);
+    public PageResponse<Report> findAll(@RequestParam(required = false) ReportStatus status,
+                                        @RequestParam(required = false) ReportCategory category,
+                                        @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return service.findAll(status, category, pageable);
     }
 
     @GetMapping("/{id}")
